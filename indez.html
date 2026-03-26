@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElatePaprika | Programador y Matemático</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg-soft: #121c30;
+      --panel: rgba(10, 16, 28, 0.78);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #f5f7fb;
+      --muted: #b6c0d1;
+      --accent: #ff584f;
+      --accent-2: #ffd166;
+      --accent-3: #5ec8ff;
+      --accent-4: #67d18f;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255, 88, 79, 0.18), transparent 24%),
+        radial-gradient(circle at 85% 18%, rgba(94, 200, 255, 0.15), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(255, 209, 102, 0.12), transparent 28%),
+        linear-gradient(160deg, #08101d 0%, #0d1628 55%, #07101a 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+      z-index: -2;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -60px;
+      top: -70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.18), transparent 68%);
+      z-index: -1;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto auto 26px 32px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 209, 102, 0.2);
+      box-shadow:
+        0 0 0 10px rgba(255, 209, 102, 0.05),
+        0 0 0 24px rgba(255, 209, 102, 0.025);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    .corner-web {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 170px;
+      height: 170px;
+      opacity: 0.2;
+      background:
+        radial-gradient(circle at 100% 0, transparent 26px, rgba(255, 255, 255, 0.8) 27px, transparent 28px),
+        radial-gradient(circle at 100% 0, transparent 52px, rgba(255, 255, 255, 0.5) 53px, transparent 54px),
+        radial-gradient(circle at 100% 0, transparent 78px, rgba(255, 255, 255, 0.35) 79px, transparent 80px),
+        linear-gradient(225deg, transparent 49.3%, rgba(255, 255, 255, 0.8) 49.8%, transparent 50.3%),
+        linear-gradient(247deg, transparent 49.3%, rgba(255, 255, 255, 0.5) 49.8%, transparent 50.3%),
+        linear-gradient(270deg, transparent 49.3%, rgba(255, 255, 255, 0.6) 49.8%, transparent 50.3%);
+      pointer-events: none;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 48px;
+    }
+
+    .brand {
+      font-size: 0.95rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #f7dba3;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-links a,
+    .button {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.035);
+      transition: 0.25s ease;
+    }
+
+    .nav-links a:hover,
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 0 18px rgba(94, 200, 255, 0.5);
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: clamp(3rem, 8vw, 6.3rem);
+      line-height: 0.92;
+      max-width: 10ch;
+    }
+
+    .gradient {
+      display: block;
+      background: linear-gradient(90deg, #ffffff 0%, #dcecff 32%, #ffd8a8 70%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .intro {
+      margin: 22px 0 0;
+      max-width: 60ch;
+      font-size: 1.07rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .intro strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), #ff875f);
+      color: white;
+      box-shadow: 0 14px 30px rgba(255, 88, 79, 0.26);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: #d4dbea;
+      font-size: 0.92rem;
+    }
+
+    .art-card {
+      position: relative;
+      min-height: 460px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(7, 12, 21, 0.95);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .art-card::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .art-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 72% 24%, rgba(94, 200, 255, 0.12), transparent 18%),
+        radial-gradient(circle at 30% 74%, rgba(255, 88, 79, 0.12), transparent 22%),
+        radial-gradient(circle at 56% 56%, rgba(255, 209, 102, 0.08), transparent 16%);
+      pointer-events: none;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 209, 102, 0.3);
+    }
+
+    .ring.one {
+      width: 170px;
+      height: 170px;
+      left: 30px;
+      bottom: 24px;
+      box-shadow: 0 0 0 14px rgba(255, 209, 102, 0.05);
+    }
+
+    .ring.two {
+      width: 220px;
+      height: 220px;
+      right: -38px;
+      top: 34px;
+      border-color: rgba(94, 200, 255, 0.24);
+      box-shadow: 0 0 0 16px rgba(94, 200, 255, 0.04);
+    }
+
+    .slash {
+      position: absolute;
+      width: 220px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.45);
+      border-radius: 999px;
+      opacity: 0.7;
+      transform: rotate(-24deg);
+    }
+
+    .slash.a {
+      top: 170px;
+      right: 30px;
+    }
+
+    .slash.b {
+      top: 195px;
+      right: 60px;
+      opacity: 0.45;
+    }
+
+    .pulse {
+      position: absolute;
+      inset: auto 36px 34px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 24px;
+      background:
+        linear-gradient(145deg, rgba(255, 88, 79, 0.88), rgba(18, 24, 40, 0.95));
+      transform: rotate(10deg);
+      box-shadow: 0 22px 44px rgba(0, 0, 0, 0.36);
+    }
+
+    .pulse::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background:
+        linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.12) 40%, transparent 42%),
+        linear-gradient(225deg, transparent 40%, rgba(255, 255, 255, 0.12) 40%, transparent 42%);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      position: relative;
+      grid-column: span 4;
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)),
+        rgba(9, 15, 25, 0.88);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel.wide {
+      grid-column: span 8;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent);
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 2.2vw, 2.3rem);
+      margin-bottom: 14px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .item {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .quote {
+      font-size: clamp(1.6rem, 2.3vw, 2.6rem);
+      line-height: 1.23;
+      color: #fff7ea;
+      max-width: 16ch;
+    }
+
+    .signature {
+      margin-top: 18px;
+      color: #f6d598;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #a9b6cb;
+      padding: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel,
+      .panel.wide {
+        grid-column: span 1;
+      }
+
+      .art-card {
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 16px, 1180px);
+        padding-top: 12px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 34px;
+      }
+
+      h1 {
+        max-width: none;
+        font-size: clamp(2.5rem, 14vw, 4rem);
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="corner-web" aria-hidden="true"></div>
+
+      <nav class="nav">
+        <div class="brand">ElatePaprika</div>
+        <div class="nav-links">
+          <a href="#perfil">Perfil</a>
+          <a href="#actual">Ahora</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Programador, matemático y amante de la música</div>
+          <h1>
+            <span class="gradient">Construyo ideas</span>
+            <span class="gradient">con lógica y estilo</span>
+          </h1>
+          <p class="intro">
+            Soy <strong>programador y matemático</strong>. Me gusta resolver problemas, convertir ideas en proyectos
+            reales y trabajar con precisión sin perder creatividad. La <strong>música</strong> forma parte de mi
+            ritmo cuando toca pensar, estudiar y crear.
+          </p>
+
+          <div class="buttons">
+            <a class="button primary" href="#perfil">Ver perfil</a>
+            <a class="button" href="#actual">Ahora</a>
+          </div>
+
+          <div class="chips">
+            <span class="chip">Código limpio</span>
+            <span class="chip">Pensamiento matemático</span>
+            <span class="chip">Creatividad digital</span>
+            <span class="chip">Ritmo y constancia</span>
+          </div>
+        </div>
+
+        <aside class="art-card" aria-hidden="true">
+          <div class="ring one"></div>
+          <div class="ring two"></div>
+          <div class="slash a"></div>
+          <div class="slash b"></div>
+          <div class="pulse"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="grid" id="perfil">
+      <article class="panel wide">
+        <h2>Perfil</h2>
+        <p>
+          Me interesa crear proyectos con claridad, estructura y personalidad. Las matemáticas me ayudan a pensar
+          con rigor, y la programación me permite convertir ese rigor en algo útil y real.
+        </p>
+
+        <div class="metrics">
+          <div class="metric">
+            <strong>Lógica</strong>
+            Analizo problemas con orden y busco soluciones sólidas.
+          </div>
+          <div class="metric">
+            <strong>Creatividad</strong>
+            Me gusta que lo técnico también tenga identidad y estilo.
+          </div>
+          <div class="metric">
+            <strong>Disciplina</strong>
+            Constancia para mejorar, aprender y terminar bien cada proyecto.
+          </div>
+          <div class="metric">
+            <strong>Ritmo</strong>
+            La música acompaña mi proceso de estudio, diseño y desarrollo.
+          </div>
+        </div>
+      </article>
+
+      <article class="panel" id="actual">
+        <h2>Ahora mismo</h2>
+        <div class="stack">
+          <div class="item">
+            <strong>Como programador</strong>
+            Disfruto construir, probar y pulir detalles.
+          </div>
+          <div class="item">
+            <strong>Como matemático</strong>
+            Me atraen los patrones, la estructura y el razonamiento.
+          </div>
+          <div class="item">
+            <strong>Con música</strong>
+            Me acompaña para concentrarme y entrar en ritmo.
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
